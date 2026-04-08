@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BW Bitmap Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>BW Bitmap Studio</h1>
+        <p>Subí una imagen, reescalala y ajustá el bitmap tocando directamente la grilla.</p>
+      </div>
+      <div class="topbar-actions">
+        <button id="undoBtn" class="icon-btn" title="Undo" aria-label="Undo">↶</button>
+        <button id="redoBtn" class="icon-btn" title="Redo" aria-label="Redo">↷</button>
+        <button id="resetAllBtn" class="secondary-btn">Limpiar</button>
+        <button id="downloadBtn" class="primary-btn">Descargar .txt</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel controls-panel">
+        <div class="panel-header">
+          <h2>Controles</h2>
+          <span class="panel-subtitle">Solo lo necesario</span>
+        </div>
+
+        <div class="control-block">
+          <label class="file-input-label" for="imageInput">Subir imagen</label>
+          <input id="imageInput" type="file" accept="image/*" />
+          <p class="hint">Acepta cualquier tamaño. Se reescala automáticamente al tamaño destino.</p>
+        </div>
+
+        <div class="control-block">
+          <label>
+            <span>Umbral</span>
+            <input id="thresholdInput" type="range" min="0" max="255" value="128" />
+          </label>
+          <div class="inline-row compact">
+            <span id="thresholdValue" class="badge">128</span>
+            <button id="autoThresholdBtn" class="secondary-btn small-btn">Auto</button>
+          </div>
+        </div>
+
+        <div class="control-block">
+          <p class="hint">Shift + flechas mueve todos los píxeles en esa dirección.</p>
+        </div>
+
+        <div class="control-block">
+          <h3>Exportación</h3>
+          <div class="grid-2">
+            <label>
+              <span>Nombre de variable</span>
+              <input id="variableNameInput" type="text" value="bitmap" />
+            </label>
+            <label>
+              <span>Bytes por línea</span>
+              <input id="bytesPerLineInput" type="number" min="4" max="64" value="16" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel preview-panel">
+        <div class="panel-header panel-header-stack">
+          <div>
+            <h2>Vista previa</h2>
+            <span class="panel-subtitle">Original y bitmap editable</span>
+          </div>
+          <div class="preview-side-controls">
+            <label>
+              <span>Ancho destino</span>
+              <input id="widthInput" type="number" min="1" max="512" value="64" />
+            </label>
+            <label>
+              <span>Alto destino</span>
+              <input id="heightInput" type="number" min="1" max="512" value="64" />
+            </label>
+            <label class="checkbox-chip">
+              <input id="invertInput" type="checkbox" />
+              <span>Invertir blanco / negro</span>
+            </label>
+            <label>
+              <span>Zoom grilla</span>
+              <input id="zoomInput" type="range" min="4" max="28" value="12" />
+            </label>
+            <span id="zoomValue" class="badge">12x</span>
+          </div>
+        </div>
+
+        <div class="preview-grid two-cols">
+          <div class="preview-card">
+            <div class="preview-card-header">
+              <h3>Imagen original</h3>
+              <span id="originalMeta" class="muted">Sin imagen</span>
+            </div>
+            <div class="preview-stage centered original-stage">
+              <img id="originalPreview" alt="Vista previa de imagen original" />
+            </div>
+          </div>
+
+          <div class="preview-card editor-card">
+            <div class="preview-card-header">
+              <h3>Bitmap</h3>
+              <span id="editorMeta" class="muted">Tocá una celda para alternarla</span>
+            </div>
+            <div class="editor-wrap">
+              <canvas id="editorCanvas" width="640" height="640"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel output-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Bitmap generado</h2>
+            <span class="panel-subtitle">Salida lista para pegar en tu código</span>
+          </div>
+          <button id="copyBitmapBtn" class="primary-btn">Copiar bitmap</button>
+        </div>
+        <div class="output-card">
+          <div class="output-wrap">
+            <textarea id="bitmapOutput" spellcheck="false"></textarea>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <canvas id="hiddenWorkCanvas" class="hidden-canvas"></canvas>
+  <script src="app.js"></script>
+</body>
+</html>
